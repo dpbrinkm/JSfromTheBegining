@@ -1,0 +1,161 @@
+Take Aways of the todo project
+
+the order of doing things:
+  1.create html, import nessasary items and scripts
+
+  2. define variables of DOM elements we are going to use lots
+
+    mainly defined things with query selector and created usful variables such as the task list, the clear btn, task input etc...
+
+  3. created a load event listeners function
+
+    all of the event listeners used were wrapped into one function which is called loadEventListeners(). mostly click events were used, except "keyup" and 'DOMContentLoaded'
+
+  4. created add task function
+    started by catching if no input. then created the DOM element:
+
+      create li element with .createElement('li')
+
+      add a class to it with .className = 'some class' !important for later when filtering
+
+      create a text node so what is written in the task form is shown, then append text node to the li 
+        li.appendChild(document.createTextNode(taskInput.Value));
+      
+      add the little x button to be able to remove task.
+        do this by adding a link to the fa icon, to add this icon you must first add <a> tag then <i> tag
+          in the className of the <a> tag must put secondary content so it is positioned on the right of the element and also delete-item so the remove function can access it later
+      
+      append the little x to the li 
+        since defined as a variable appending was a simple li.appendChild(link)
+
+      finally once the element is complete then append to the taskList variable 
+
+      dont forget to clear the input
+
+      and prevent the default action when a submit button is pressed
+
+  5. create remove task function
+    to specifically target the favIcon x must call the parent element of taskList and search for the element with a classList name of 'delete-item' <-- this is why it was important to create the li with the link 
+
+    e.target is targeting the <i> tag so must call parentElement
+
+    when deleting we must call the parent of the parent to delete the whole li becasue the structure is
+
+    <li>
+      <a class="delete-item secondary-content">
+        <i class="fa fa-remove"></i>
+      </a>
+    </li>
+
+    call the built in remove function on the parent of the parent aka the li
+
+  6. create a filter function to sort different todo items
+
+    the idea here is the use types in some data to the form element and the task list responds is there is a match to what is being typed in
+
+      first change input text to lower case
+
+      target li list with querySelectorAll 
+        target anything with a class name of .collection-item
+
+        since querySelectorAll returns an array we can use a forEach loop on it
+
+          pass through each task in the forEach loop
+
+          create a variable to grab the text content of the first child aka the <a> tag
+
+          change the tasks to lower case to be able to match with the form input
+
+          if the form input matches any data inside the li show that on the ul
+
+            !SIDENOTE: to know if it matched we pass the function indexOf(data from the user) then if there is no match it will = -1 so if its != -1 we display that
+
+            display as block.... not sure i understand this
+
+          !CODE:
+
+            if(item.toLocaleLowerCase().indexOf(text) != -1){
+              task.style.display = 'block';}
+
+          if not dont display anything
+
+  7. create clear tasks function
+
+      when user clicks button all tasks are deleted
+
+      two ways of doing this: set innerHtml ="" or use while loop
+
+        while loop logic:
+          as long as there is a firstChild of the taskList variable then call the remove function on the task lists firstChild.
+
+          basically its just checking to see if there is a firstChild and if there is it deletes it until there are no longer any firstChild
+
+      while loop is faster algo, but i did the easier way....
+
+  8. add items to local storage
+
+    inside addTask function create another function that is called so it sends the data to local storage
+
+    make sure to pass through the user input as a parameter of the new setLocalStorgae function aka:
+      setLocalStorgae(userInput);
+
+    outside the addTask function create the setLocalStorgae function and pass in the parameter.
+
+      first check local storage to see what it has, if empty set it as an array
+
+      if not empty parse what is already in local storage then push the user input onto that
+
+      after pushing set the local storage again making sure to use JSON.stringify
+
+  9. remove from local storage
+
+    inside the remove task function create another function to cremove from local storage that is called when the remove task function is called
+
+    pass through the data of which task will be removed as a parameter of the function while being called inside the remove task function aka:
+      removeFromLocal(theTaskToRemove);
+
+    check to see whats in local, if null return empty array, otherwise parse out whats in local.
+
+    run a forEach loop on the task list that has been parsed out, for each item in the array run a function to check and see if it matched the data that was passed into the function. 
+      also set two parameters of the forEach funtion the task that we are looking to delete andalso the index number !important for splice function in next step
+
+      if the task is found in local storage then use .splice() function to remove it at its certian index:
+
+        !CODE:
+
+          tasks.forEach(function(task, index){
+            if(taskItem.textContent === task){
+              tasks.splice(index, 1);
+              }
+            });
+
+        the full idea here is interesting becasue you are passing in a parameter to the main funtion (taskItem) the creating an array variable tasks then calling a forEach function on that array which you pass in the parrameters task and the index. the way i understand each of these is:
+
+          taskItem: 
+            the info that is coming from the remove task function this is the <li> tag of the DOM which is why its needed to use taskItem.textContent
+
+          tasks: 
+            the array that is in local storage 
+
+          task: 
+            each individual element of the array
+              arr tasks = [task1, task2, task3, task4];
+
+  10. clear all in local 
+      simply call the clearAllFromLocal function inside the Clear all function 
+        // no need to pass in parameters
+
+      create ClearAllFromLocal function can call localStorage.clear();
+
+RANDOM SIDENOTES:
+
+with query selctors when entering in the name of what you want to select be sure to rememeber to use .someclass #someId or nothing if its a tag like an <h2>
+
+the indexOf() can be passed text and if it doesnt contain the text it will return -1 
+
+going through like this and doing it helps to understand and reinforce the concepts, some places i feel i wouldnt have been able to do on my own were with the 
+  create element 
+  targeting different parts of the element
+  forEach loops and calling functions with them
+  proper linking of lots of different things .something.parentchild.createTextNode.remove() and all that bullshit
+   
