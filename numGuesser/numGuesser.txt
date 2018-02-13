@@ -1,0 +1,74 @@
+started by creating a simple ui interface with the skeleton framework. nothing special here, just a form and a few H2.
+
+juicy stuff starts when we get into the JS file.
+
+ start by setting up the min and max numbers, also create a variable of the winning number and the amount of guess alotted to the user.
+  one thing that stood out for me here was that you can declare a sucsession of variables without repeating the let key word. in practice it looks like this:
+
+    //CODE
+      let min = 1,
+          max = 10,
+          winningNum = randomNum(min, max), <-- interesting that you can assign a variable a function that takes in dif parameters
+          guessesLeft = 3;
+ 
+ then continued to creating variables of different parts of the ui elements. again here we created the variables without repeating the let or const keyword.
+  on all of these we created variables for things such as the min/max number display tag, the guess that the user inputs, and the guess button and a message that is displayed after the user guesses.  
+    brad was saying that usually he likes to declare ui variables by prefixing them with UI... ie 
+      const UIgame = document.querySelector('#game');
+
+//set up event listener for when the user inputs and clicks on the btn.
+  -this triggers a function which:
+  
+    1. validates the input NaN 1> || <10
+
+    2. checks if its the winning number..
+      if is assigns a msg in the <p> tag saying good job winner
+      this is later refratored into a function becasue DRY was apparent for win and lose
+
+    3. if wrong guess, take away one guess      from the guesses left variable
+
+    4. evalute how many guesses there are    now in guesses variable with        conditional to check if guesses == 0 game over send msg to <p> tag saying you loose
+
+    5.  disable the form box so no more answers can be subitted with:
+      someFormVariable.disabled = true;
+
+    6. if guessesLeft !== 0 user get more chances and message is thrown saying "keep trying" and the guess input gets cleared 
+
+  - conditionals nested in conditionals
+
+    1st conditional if input is good
+    2nd if number is correct
+      else take away guess  
+      1st nested if guees == 0 
+        else keep guessing
+
+    refractor code by creating a gameOver function that either gives you a win or loss
+      !important! interesting part about this function is to say weather you win or lose you create one of the parameters to be won and the other parameter to be the message. inside the function you say if won = true you win, if won = false you lose
+
+      //CODE:
+        function gameOver(won, msg){
+
+  let color;
+  won === true ? color = 'green' : color = 'red';
+  //disable input
+  guessInput.disabled = true;
+  // change border
+  guessInput.style.borderColor = color;
+  //set text color
+  guessInput.style.color = color;
+
+// create the random number funtion had some interesting parts to keep in mind:
+
+  - passes in the min and max variable as parameters
+
+  - Math.random() gives you a random decimal then you multiply it by the max number of the series and minus the min number, then plus 1 and plus the min to make sure it goes all the way up to the max number.
+
+    //CODE:
+  - function randomNum(min, max){
+  return Math.floor(Math.random()*(max - min + 1)+ min);
+  }
+
+// there was also the set message function which changed the text of the <p> tag. this is what was being called at the end of the functions to change the text content.
+
+
+

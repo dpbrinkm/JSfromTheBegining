@@ -1,0 +1,188 @@
+// Contructors and this keyword 
+
+// review....
+
+object literals // basically key value pairs
+  //ie: 
+  const sam = {
+    name: 'Sam',
+    age: '31';
+  }
+    // key value pairs are seperated by comma
+
+    // good for dealing with one instance of something 
+
+    // when dealing with various instances better to use constructors
+
+//constructor method 
+
+function Person(){ //constructor method
+  this.name = 'Sam'; // property called name
+}
+
+//instanciate a person object from this
+const sam = new Person(); // returns object of person with name sam
+
+//better yet 
+
+function Person(name, dob){
+  this.name = name;
+  //this.age = age; 
+  this.birthday = new Date (dob); // date is a core object of javascript, comes with it
+}
+
+const brad = new Person('brad'); // object named brad
+const sam = new Person('sam'); // object with name sam 
+
+
+const brad = new Person('brad', '09-21-1987');
+//this keyword pertains to the scope youre dealing with
+// when this is global scope it pertains to the window object
+
+//calculate the age from the birthday with a method using the dob parameter that is passed in.
+function Person(name, dob){
+  this.name = name;
+  this.birthday = new Date (dob); 
+  this.calculateAge = function(){
+    const dif = Date.now() - this.birthday.getTime();
+    const ageDate = new Date(dif);
+    return Math.abs(ageDate.getUTCFullYear() - 1970); //math dont need new keyword, but does need capital
+  }
+}
+
+//prototypes
+
+// the names and birthday are going to be diferent for each instance of this method, but calculateAge functionwill be the same -always- so it makes sense to use it as a prototype now put it directly into the object
+function Person(firstName, lastName, dob){
+  this.firstName = firstName;
+  this.lastName = lastName;
+  this.birthday = new Date (dob); 
+  // this.calculateAge = function(){
+  //   const dif = Date.now() - this.birthday.getTime();
+  //   const ageDate = new Date(dif);
+  //   return Math.abs(ageDate.getUTCFullYear() - 1970); //math dont need new keyword, but does need capital
+  // }
+}
+
+//__proto__ where the prototype goes
+
+//calculateAge
+Person.prototype.calculateAge = function(){
+  this.calculateAge = function(){
+    const dif = Date.now() - this.birthday.getTime();
+    const ageDate = new Date(dif);
+    return Math.abs(ageDate.getUTCFullYear() - 1970); //math dont need new keyword, but does need capital
+  }
+}
+
+//another protype method
+// print the full name together
+Person.prototype.getFullName = function(){
+  return `${this.firstName} ${this.lastName}`;
+}
+
+// now let imagine that mary gets married 
+// this changes her last name
+
+Person.prototype.getsMarried = function(newLastName){
+  this.lastName = newLastName;
+}
+
+//now lets play
+const mary = new Person('Mary', 'Smith', '5-25-1983');
+
+
+console.log(mary);
+// returns the object with her name and age etc
+
+console.log(mary.calculateAge()); // returns only her age
+
+//!!when calling calcAge method the () are used, becasue what if you need to pass in a parameter!!
+
+mary.getsMarried('James');
+//changes marys last name
+
+console.log(mary.getFullName()); // returns Mary James
+
+// with this example above i can see how you can change the different attributes of certian objects. 
+//VERY USEFUL 
+
+//proto inherance 
+
+//person constructor 
+function Person(firstName, lastName){
+  this.firstName = firstName;
+  this.lastName = lastName;
+}
+
+//greeting
+Person.prototype.greetimg = function(){
+  return `Hello ${firstName} how are you?`
+}
+
+//customer constructor
+function Customer(firstName, lastName, phone, membership){
+  Person.call(this, firstName, lastName)
+
+  this.phone = phone;
+  this.membership = membership;
+}
+//call is a function that allows us to call another function from somewhere else in the current context  
+
+const customer1 = new Customer('tom', 'smith', '43282829', 'standard')
+
+// inherite the Person Prototype methods
+Customer.prototype = Object.create(Person.prototype);
+// this line allows you to take different methods from other constructors
+
+
+//make customer.prototype return customer()
+Customer.prototype.constructor = Customer;
+
+//Customer gretting
+Customer.prototype.greetimg = function(){
+  return `${firstName}, you're a boss!`;
+}
+
+//create prototypes inside a parent object and have diff properties with different methods
+
+const personPrototypes = {
+  greeting: function(){
+    return `hello there ${this.firstName} you're amazing!`;
+  },
+  getsMarried: function(newLastName){
+    this.lastName = newLastName;
+  }
+}
+//two different ways of writing the same thing
+//first style
+const mary = Object.create(personPrototypes);
+mary.firstName = 'Mary';
+mary.lastName = 'Williams';
+mary.age = 30;
+
+// second style
+const demetrios = Object.create(personPrototypes, {
+  firstName: {value: 'Demetrios'},
+  lastName: {value: 'Brink'},
+  age: {value: 30}
+
+});
+
+console.log(mary.greeting());
+
+//ES6
+
+class Person {
+  constructor(firstName, lastName){
+    this.firstName = firstName;
+    this.lastName = lastName;
+  }
+
+  greeting(){
+    return ` hello ${firstName} ${lastName}`;
+  }
+}
+
+const mary = new Person('Mary', 'Williams');
+

@@ -1,0 +1,188 @@
+Asynchronous programming
+
+ajax, http requests
+
+asynch and synch code
+  synch code = ex. 
+    posts = laodPostsSync();
+      //wait til posts are fetched then do something 
+  asynch = using 
+    callback functions 
+    ES6 promises 
+    asynch/await
+
+AJAX
+
+  - no page reload/ refresh
+  - some API require authentication
+  
+external librarie you can use 
+  -fetch API - vanilla JS
+  -Axios
+  -Superagent
+  -Jquery 
+  -node HTTP
+
+  XHR object methods
+
+    function loadData(){
+      // create XHR object  
+      const xhr = new XMLHttpRequest();
+
+      //open
+      xhr.open('GET','data.txt', true);
+
+      //first parameter is type of request 
+        second is file wanna make request to 
+        third is true/false for asynch or not
+
+      xhr.onload = function(){
+        if(this.status === 200){
+          console.log(this.responseText);
+        }
+      }
+      xhr.send();
+    }
+
+  what happens above..... calls a function which creates a new instance of an XHR object, call the .open() and pass in the type of request and what you want to get. then call onload() when everything is ready, we make sure status is 200 then it console logs the data from the file that was called. 
+
+//DEALING WITH API
+
+to grab info from specific input 
+('input[type ="number"]).value
+
+xhr.onload = function(){
+  if(this.status === 200){
+    const response = JSON.parse(this.responseText); 
+
+    let output = '';
+
+    if (response.type === 'success'){
+      response.value.forEach(function(joke){
+        output+=`<li>${joke.joke},/li>`
+      });
+    }else{
+      output += <li>something went wrong</li>
+    }
+    document.querySelector('.jokes').innerHTML = output;
+   }
+}
+
+all api is different, so beware on how to use the feedback data
+
+//REST API 
+
+what is an api = aplication programmin interface, many devices have different api.
+
+  rest = reoresentational state transfer
+    blog posts, user, etc 
+    used with http requestss so can be used and worked with by lots of languages, python, ruby, JS
+
+  
+diff types of requests 
+  get: retrueve data from a specific resource
+  post: submit data to be processed to a specific resourse
+  put: update a specific resourse 
+  delete: delete a specific resourse
+
+//CALLBACK FUNCTIONS
+
+  function thats passed in as a parameter to another function then ran inside the function body
+
+  ie forEach on an array....
+
+  setTimeOut is also a callback
+
+  const posts [{
+    title:'post 1', body: thiw is post 1 
+  }];
+
+  function createPost(post, callback){
+    setTimeOut(function(){
+      posts.push(post);
+      callback()
+    }, 2000);
+  }
+
+function getPosts(){
+  setTimeOut(function(){
+    let output = '';
+    post.forEach(function(post){
+      output+=`<li>${post.title}</li>`;
+    })
+    document.body.innerHTML = output
+  }, 1000);
+}
+
+//promises
+
+response and reject 
+
+.then(function(){
+  do something;
+});
+
+.catch()
+
+  fetch('someURL');
+function getText(){
+  fetch('test.txt')
+  .then(parameter => parameter.attribute())
+  .then(diffParam => {
+    console.log(diffParam);
+    document.getElementById('someID').innerHTML = diffParam;
+  })
+  .catch(err => console.log(err));
+}
+
+
+
+//arrow functions
+
+  const sayHello = function(){
+    console.log('hello');
+  }
+
+  //with arrow
+  const sayHello = () => {
+    console.log('hello')
+  }
+
+  when function body is only one line you can make even more compact
+
+  //super arrow one line
+  const sayHello = () => console.log('hello');
+
+//returning doesnt need anything
+  const sayHello = () => 'hello'
+
+//same as above 
+  const sayHello = function(){
+    return 'hello';
+  }
+
+//this technique needs care with object literals must be wrapped in parenthasis
+
+const sayHello = () => ({msg: 'hello'})
+
+const sayHello = (name) => console.log(`hello $(name)`);
+
+//if single parameter like above no need for parenthasis
+
+const sayHello = name => console.log(`hello $(name)`);
+
+//multiple param needs parenthasis
+const sayHello = (fistName, lastName) => console.log(`hello ${firstName} ${lastName}`);
+
+const users = ['jon','sam','jorge'];
+
+const nameLength = users.map(function(name){
+  return name.length;
+});
+//with arrow
+const nameLength = users.map((name) => {
+  return name.length;
+});
+
+const nameLength = users.map(name => name.length);
+
