@@ -1,0 +1,56 @@
+6-11
+
+condionally render react elements 
+
+
+function Message({message}){
+  if(!message){
+    return <div>No Message</div>
+  }
+  return <div>{message}</div>
+}
+reactDOM.render(
+
+  <Message message={null}/>,
+  documnt.getElementById('root'),
+)
+
+//app for reading time 
+
+function tick(){
+  const time = new Date().toLocaleTimeString()
+  const element = <div> It is {time}
+  </div>
+  ReactDOM.render(element, rootElement)
+}
+
+tick()
+setInterval(tick, 1000) //every second it rerenders that app only updates the parts that matter only updates the part of dom that is nessasary 
+
+//to style in react
+  can use the className prop like would with class 
+  can use the style prop like you would object in css 
+
+//libraries to help with style with react
+
+//event handlers
+
+const state = {eventCount: 0, username:''}
+
+function App() {
+  return(
+    <div>
+      <p>
+        There have been {state.eventCount} events
+      </p>
+      <p>
+        <button>something</button>
+      </p>
+      <p>You typed: {state.username}</p>
+      <p>
+        <input />
+      </p>
+    </div>
+  )
+}
+

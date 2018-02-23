@@ -1,0 +1,216 @@
+React notes from begginer Egghead course
+ 
+ const element = react.createElement(
+   'div', <--- what kind of element 
+   {className:'container'}, <--- properties
+   'Hello World' <--- what you want inside element as a child element that goes in props
+ )
+
+ can also be done like this
+
+const element = react.createElement(
+   'div', <--- what kind of element 
+   {className:'container', 
+    children: 'Hello world' or ['some', 'array']
+   } 
+ )
+
+ create element is as simple as createElement api is as simple as the element you want to create and then an object that has all of the props that you want applied.
+
+ as a convinience you can apply all the props as objects after the element decleration
+
+ //USING babel and JSX
+
+ different from HTML className 
+
+ when you use {} in JSX you exit JSX land and enter javascript land 
+    you can use this inside the div or as an atribute name
+
+    common in JSX to do:
+
+      const props = {
+        className:'container',
+        children:'hello world',
+      }
+
+      const element = (
+        <div {...props}/>  // similar to object spread
+      )
+
+//creating functions 
+  const message = props => <div>{props.msg}</div>
+  const element = (
+    <div className='container'>
+      {message({msg:'Hello World'})}
+      {message({msg:'GoodBye World'})}
+    </div>
+  )
+
+  //react.creatElement can take strings and functions 
+
+  for JSX to differenciat variable and string use capital for variable
+
+  so you create a function that has a capital letter as the first Character, which will recieve props then you return those react elements and then you can use them like HTML elements like <div> 
+
+  !always start component names with a capital letter otherwise it will be treated as a DOM tag
+
+  there are such things as pure and impure functions 
+    pure functions return the same results for the same inputs always
+    aka
+      function sum(a,b){
+        return a+b
+      }
+
+    impure is like this
+      function withdraw(account, amount){
+        account.total -= amount
+      }
+    what i thin i understand is that it is impure if it chances the value of one of the arguments passed into the function
+
+    //wiki definition for mutable and immutable objects 
+
+        immutable object (unchangeable object) is an object whose state cannot be modifided after its created
+
+        mutable object (changable object) is an object thats state can be modified after its created
+
+//a methos is just a function attached to an object
+
+  reactDOM.render(react What, React Where) 
+      //first argument is the what
+      //second is the where
+
+
+//everything in react is a component
+
+can divide the life cycle methods into 3 catagories
+  1. Mounting 
+  2. Updating
+  3. Unmounting
+
+********* MOUNTING *********
+
+  a. constructor()
+  b. componentWillMount()
+  c. render()
+  d. componentDidMount()
+
+********** UPDATING *********
+
+  a. componentWillRecieveProps()
+  b. shouldComponentUpdate()
+  c. componentWillUpdate()
+  d. render()
+  e. componentDidUpdate()
+
+******** UNMOUNTING ********
+
+  a. componentWillUnmount()
+
+//////////////////////////////////
+
+******** State vs. Props ********
+
+//state is something that a component owns
+  ie a persons age is a state of that person
+    it belongs to that component, its something it owns
+
+//state is mutable 
+  but only can be changed by the component that owns it
+  can change state by using: 
+  
+    this.setState()
+
+//props are simalar to method arguments
+  they pass to a component where that component is used
+
+//props are immutable
+
+you can convert a functional component to a class in five steps
+
+  1. crete an ES6 class with the same name that extends               React.Component //remember to use capitals
+  2. add a single empty method to it called render()
+  3. move the body of the function into the render() method
+  4. replace props with this.props in the render() body
+  5. delete the remaining empty function 
+
+    class Clock extends React.Component {
+      render(){
+        return(
+          <div>
+            <h1>Hello, World!</h1>
+            <h2>It is {this.props.date.toLocaleTimeString()}.</h2>
+          </div>
+        );
+      }
+    }
+
+
+componentDidMount()
+
+componentWillUnmount()
+
+^^these methods are called life cycle hooks
+
+componentWillUnmount() runs after the components output has been rendered in the DOM
+
+an example of a clock that updates itself every second 
+
+
+  class Clock extends React.Component {
+    constructor(props) {
+      super(props);
+      this.state = {date: new Date()};
+    }
+
+    componentDidMount() {
+      this.timerID = setInterval(
+        () => this.tick(),
+        1000
+      );
+    }
+
+    componentWillUnmount() {
+      clearInterval(this.timerID);
+    }
+
+    tick() {
+      this.stateState({
+        date: new Date()
+      });
+    }
+
+    render() {
+      return (
+        <div>
+          <h1>Hello, world</h1>
+          <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+        </div>
+      );
+    }
+  }
+
+ReactDOM.render(
+  <Clock/>,
+  document.getElementById('root')
+);
+
+what i understand of the code above
+  //a class is being created
+    inside the class you have a constructor and you pass in props
+    
+    this constructor creates super() and passes in props // dont know what that is
+
+    from there you set the state as an object
+
+    you then create new methods inside the class
+      componentDidMount() for the method that is being called to continiuosly updates
+
+      componentWillUnmount() as a trash collector
+
+      tick() to define or declare the method being used in the componentDidMount() method 
+        // notice how this is always being used casue they are inside objects i think?
+
+      render() to show what to put in the DOM 
+        //this is where the HTML goes 
+
+    // after the object you have to call reactDOM.render() where you insert the class and say where you want to see it.
